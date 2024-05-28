@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Orientações</title>
+
+    <link rel="stylesheet" href="assets/css/listar-orientacoes.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Listar Orientações</h1>
+        <div id="orientacoes-lista"></div>
+    </div>
+
+    <script>
+
+
+       async function carregarOrientacoes() {
+
+    try {
+        // Fazendo uma requisição HTTP GET para a URL '/orientacoes'
+        const response = await fetch('/orientacoes');
+        
+
+        // Convertendo a resposta para JSON
+        const orientacoes = await response.json();
+        
+        // Selecionando o elemento HTML com o id 'orientacoes-lista'
+        const orientacoesLista = document.getElementById('orientacoes-lista');
+
+        // Iterando sobre o array de orientações
+        orientacoes.forEach(orientacao => {
+
+            // Criando uma nova div para cada orientação
+            const divOrientacao = document.createElement('div');
+
+            // Adicionando a classe 'orientacao' à nova div
+            divOrientacao.classList.add('orientacao');
+
+            // Definindo o conteúdo HTML da nova div
+            divOrientacao.innerHTML = `
+                <h2>${orientacao.titulo}</h2>
+                <p>${orientacao.descricao}</p>
+                <img src="../${orientacao.imagem}" alt="Imagem da Orientação">
+                <button onclick="verMais(${orientacao.id})">Ver mais</button>
+            `;
+
+            // Adicionando a nova div ao elemento 'orientacoes-lista'
+            orientacoesLista.appendChild(divOrientacao);
+        });
+    } catch (error) {
+        // Capturando e exibindo qualquer erro que ocorra no bloco try
+        console.error('Erro ao carregar orientações:', error);
+    }
+}
+    function verMais(id) {
+            // Redireciona para a página de detalhes da orientação
+            window.location.href = `/orientacao/${id}`;
+        }
+
+        // Carregar as orientações quando a página carregar
+        window.addEventListener('load', carregarOrientacoes);
+    </script>
+</body>
+</html>
